@@ -9,7 +9,7 @@ export function createApp(): Application {
   const router = new Router();
 
   router.get("/greet", (ctx) => {
-    const { name = "anonymous " } = helpers.getQuery(ctx);
+    const { name = "anonymous" } = helpers.getQuery(ctx);
     ctx.response.body = `Hello ${name}`;
   });
 
