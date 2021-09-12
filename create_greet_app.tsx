@@ -15,12 +15,29 @@ function App() {
       <body>
         <h1>Sample greet app</h1>
 
-        <form action="/greet" method="get">
+        <form onSubmit="greet()" action="javascript:" method="get">
           <label for="name">Enter name to greet: </label>
           <input type="text" name="name" id="name" required />
 
           <input type="submit" value="Greet!" />
         </form>
+
+        <div>
+          Result: <span id="result"></span>
+        </div>
+
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            function greet(){
+              const name = document.getElementById("name");
+              fetch(\`/greet?name=\${name.value}\`)
+                .then( res => res.json() )
+                .then( data => document.getElementById("result").textContent = data.message )
+            }
+          `,
+          }}
+        />
       </body>
     </html>
   );
@@ -36,7 +53,7 @@ export function createApp(): Application {
 
   router.get("/greet", (ctx) => {
     const { name = "anonymous" } = helpers.getQuery(ctx);
-    ctx.response.body = `Hello ${name}`;
+    ctx.response.body = { message: `Hello ${name}` };
   });
 
   app.use(router.routes());
